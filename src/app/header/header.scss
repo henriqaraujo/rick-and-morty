@@ -7,6 +7,7 @@
     padding: 8px 16px 8px 16px;
     position: fixed;
     background-color: #ffffff;
+    z-index: 1000; /*garante que o header fique por cima de tudo */
 }
 
 .border-header{

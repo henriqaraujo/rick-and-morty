@@ -11,6 +11,7 @@
   overflow: hidden;
   position: fixed;
   background-color: #ffffff;
+  z-index: 1000; /*garante que o header fique por cima de tudo */
 }
 
 .sidebar.expanded {
