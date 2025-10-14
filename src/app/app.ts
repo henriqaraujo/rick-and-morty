@@ -1,9 +1,24 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Header } from './header/header';
+import { LeftMenu } from './left-menu/left-menu';
+import { Dashboard } from "./dashboard/dashboard";
+import { EpisodesComponent } from "./episodes/episodes";
+import { Characters } from './characters/characters';
+import { CharacterDetail } from './character-detail/character-detail';
+import { EpisodeDetailsComponent } from './episode-details/episode-details';
+
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [
+    Dashboard,
+    Header,
+    LeftMenu,
+    EpisodesComponent,
+
+],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

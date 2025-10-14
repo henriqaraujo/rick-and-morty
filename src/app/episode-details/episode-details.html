@@ -1,0 +1,11 @@
+<div class="detail-container" *ngIf="episode">
+  <button routerLink="/" class="back-btn">← Voltar</button>
+  <h2>{{ episode.name }}</h2>
+  <p><strong>Temporada:</strong> {{ episode.episode.slice(1,3) }}</p>
+  <p><strong>Episódio:</strong> {{ episode.episode.slice(4) }}</p>
+  <p><strong>Lançamento:</strong> {{ episode.air_date }}</p>
+  <p><strong>Personagens:</strong></p>
+  <ul>
+    <li *ngFor="let character of episode.characters">{{ character }}</li>
+  </ul>
+</div>

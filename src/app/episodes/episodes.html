@@ -1,0 +1,21 @@
+<div class="episodes-container">
+  <h2>Episódios</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Temporada</th>
+        <th>Título</th>
+        <th>Lançamento</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let ep of episodes" (click)="goToEpisode(ep.id)" class="clickable">
+        <td>#{{ ep.id.toString().padStart(2, '0') }}</td>
+        <td>{{ ep.episode.slice(1,3) }}</td>
+        <td>{{ ep.name }}</td>
+        <td>{{ ep.air_date }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

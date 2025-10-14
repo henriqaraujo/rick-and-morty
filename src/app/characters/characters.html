@@ -1,0 +1,26 @@
+<div class="container">
+  <h2>Personagens</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Espécie</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let character of characters"
+        (click)="goToDetails(character.id)"
+        class="character-row"
+      >
+        <td class="character-name">
+          <img [src]="character.image" alt="{{ character.name }}" />
+          {{ character.name }}
+        </td>
+        <td>{{ character.species }}</td>
+        <td>{{ character.status }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
