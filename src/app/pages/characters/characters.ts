@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { CharactersService } from '../../services/characters.service';
 
 interface Character {
   id: number;
@@ -21,26 +22,20 @@ interface Character {
 export class Characters implements OnInit {
   characters: Character[] = [];
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private charactersService: CharactersService, private router: Router) {}
 
   ngOnInit(): void {
     this.fetchCharacters();
   }
 
   fetchCharacters(): void {
-    // Altere a URL abaixo para a URL real da sua API
-    this.http.get<any>('https://rickandmortyapi.com/api/character').subscribe({
-      next: (response) => {
-        // Supondo que a API retorne um array de personagens
-        this.characters = response.results || response;
-      },
-      error: (error) => {
-        console.error('Erro ao buscar personagens:', error);
-      },
+    this.charactersService.getAllCharacters().subscribe({
+      next: (res) => this.characters = res.results,
+      error: (err) => console.error(err)
     });
   }
 
-  goToDetails(id: number): void {
-    this.router.navigate(['/personagem', id]);
+  goToCharacter(id: number): void {
+    this.router.navigate(['/character', id]);
   }
 }

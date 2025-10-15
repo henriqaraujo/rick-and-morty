@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { LeftMenu } from "../left-menu/left-menu";
-import { Header } from "../header/header";
+import { LeftMenu } from "../pages/left-menu/left-menu";
+import { Header } from "../pages/header/header";
 
 @Component({
   selector: 'app-dashboard',

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { EpisodesService } from '../services/episodes.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { EpisodesService } from '../../services/episodes.service';
+import { Episode } from '../../models/episodes';
 
 @Component({
   selector: 'app-episodes',
@@ -11,18 +12,25 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./episodes.scss']
 })
 export class EpisodesComponent implements OnInit {
-  episodes: any[] = [];
+episodes: Episode[] = [];
 
   constructor(private episodesService: EpisodesService, private router: Router) {}
 
+  
   ngOnInit(): void {
-    this.episodesService.getEpisodes().subscribe((data) => {
-      console.log('Retorno da API:', data);
-      this.episodes = data.results;
+    this.fetchEpisodes();
+  }
+
+  //Função para buscar todos os episódios
+  fetchEpisodes(): void {
+    this.episodesService.getAllEpisodes().subscribe({
+      next: (res) => this.episodes = res.results,
+      error: (err) => console.error(err)
     });
   }
 
-  goToEpisode(id: number) {
+  //Função para ir até os detalhes do episódio
+  goToEpisode(id: number): void {
     this.router.navigate(['/episode', id]);
   }
 }

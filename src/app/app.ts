@@ -1,11 +1,11 @@
 import { Component, signal } from '@angular/core';
-import { Header } from './header/header';
-import { LeftMenu } from './left-menu/left-menu';
-import { Dashboard } from "./dashboard/dashboard";
-import { EpisodesComponent } from "./episodes/episodes";
-import { Characters } from './characters/characters';
-import { CharacterDetail } from './character-detail/character-detail';
-import { EpisodeDetailsComponent } from './episode-details/episode-details';
+import { Header } from './pages/header/header';
+import { LeftMenu } from './pages/left-menu/left-menu';
+import { Dashboard } from "./pages/dashboard/dashboard";
+import { EpisodesComponent } from "./pages/episodes/episodes";
+import { Characters } from './pages/characters/characters';
+import { CharacterDetail } from './pages/character-detail/character-detail';
+import { EpisodeDetailsComponent } from './pages/episode-details/episode-details';
 
 
 
@@ -17,6 +17,7 @@ import { EpisodeDetailsComponent } from './episode-details/episode-details';
     Header,
     LeftMenu,
     EpisodesComponent,
+    EpisodeDetailsComponent
 
 ],
   templateUrl: './app.html',
@@ -24,4 +25,6 @@ import { EpisodeDetailsComponent } from './episode-details/episode-details';
 })
 export class App {
   protected readonly title = signal('rick-and-morty');
+
+  
 }
