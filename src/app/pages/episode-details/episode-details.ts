@@ -34,6 +34,7 @@ export class EpisodeDetailsComponent implements OnInit {
     }
   }
 
+  //
   getEpisode(id: string) {
     this.episodesService.getEpisodeById(id).subscribe({
       next: (episodeData) => {

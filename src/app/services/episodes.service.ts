@@ -25,4 +25,10 @@ export class EpisodesService {
   getEpisodeById(id: number | string): Observable<Episode> {
     return this.http.get<Episode>(`${this.apiUrl}/${id}`);
   }
+
+  //Método para pegar múltiplos episódios por IDs
+  getEpisodesByIds(ids: number[]): Observable<Episode[] | Episode> {
+  const idsParam = ids.join(',');
+  return this.http.get<Episode[] | Episode>(`${this.apiUrl}/${idsParam}`);
+  }
 }

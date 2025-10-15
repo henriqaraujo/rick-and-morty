@@ -17,12 +17,18 @@ export class CharactersService {
   constructor(private http: HttpClient) {}
 
   //Método para pegar todos os personagens
-  getAllCharacters(): Observable<{ results: Character[] }> {
-    return this.http.get<{ results: Character[] }>(this.apiUrl);
+  getAllCharacters(): Observable<{ info: any; results: Character[] }> {
+    return this.http.get<{ info: any; results: Character[] }>(this.apiUrl);
   }
 
   //Método para pegar personagem por ID
   getCharacterById(id: number | string): Observable<Character> {
     return this.http.get<Character>(`${this.apiUrl}/${id}`);
+  }
+
+  //Método para pegar múltiplos personagens por IDs
+  getCharactersByIds(ids: number[]): Observable<Character[] | Character> {
+  const idsParam = ids.join(',');
+  return this.http.get<Character[] | Character>(`${this.apiUrl}/${idsParam}`);
   }
 }
