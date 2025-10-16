@@ -2,58 +2,105 @@ import { Injectable, signal } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
+/*
+ Estrutura de dados de um registro de navegação.
+ Armazena a URL acessada e o horário em que foi visitada.
+ */
 export interface NavigationRecord {
   url: string;
   timestamp: string;
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root' // Torna o serviço global (singleton) em toda a aplicação.
 })
+
 export class NavigationHistoryService {
+  // Chave usada para armazenar os dados no localStorage.
   private readonly STORAGE_KEY = 'navigation_history';
+
+  // Signal reativo que guarda o histórico de navegação.
+  // Ele é atualizado automaticamente sempre que a navegação muda.
   private _history = signal<NavigationRecord[]>([]);
 
   constructor(private router: Router) {
+    //Carrega o histórico armazenado anteriormente no localStorage.
     this.loadFromStorage();
 
-    // Escuta mudanças de rota
+    // Log no console para confirmar que o serviço foi inicializado.
+    console.debug('[NavHistory] Service instanciado. Histórico atual:', this._history());
+
+    // Escuta os eventos de navegação do Angular Router.
+    // O filter() garante que só ouviremos o fim de cada navegação (NavigationEnd).
     this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event) => {
-        const nav = event as NavigationEnd;
-        this.addRecord(nav.urlAfterRedirects);
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe((e) => {
+        const ev = e as NavigationEnd;
+
+        // Loga no console cada mudança de rota (para debug).
+        console.debug('[NavHistory] NavigationEnd ->', ev.urlAfterRedirects);
+
+        // Adiciona a nova navegação ao histórico.
+        this.addRecord(ev.urlAfterRedirects);
       });
   }
 
-  // Getter do histórico
-  get history() {
-    return this._history.asReadonly();
-  }
 
-  // Adiciona um registro
+  // Retorna o signal de histórico como somente leitura.
+  // Outros componentes podem observar mudanças, mas não alterar diretamente.
+  get history() { return this._history.asReadonly(); }
+
+
+  // Adiciona um novo registro de navegação ao histórico e salva no localStorage.
+  // param url - URL acessada
   private addRecord(url: string) {
-    const newRecord: NavigationRecord = {
-      url,
-      timestamp: new Date().toISOString(),
-    };
+    try {
+      const record: NavigationRecord = {
+        url,
+        timestamp: new Date().toISOString() // registra o horário exato do acesso
+      };
 
-    const updated = [...this._history(), newRecord];
-    this._history.set(updated);
-    this.saveToStorage();
-  }
+      // Cria um novo array com o registro adicionado (imutabilidade).
+      const updated = [...this._history(), record];
 
-  // Persiste no localStorage
-  private saveToStorage() {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this._history()));
-  }
+      // Atualiza o signal com o novo histórico.
+      this._history.set(updated);
 
-  // Carrega do localStorage ao iniciar
-  private loadFromStorage() {
-    const data = localStorage.getItem(this.STORAGE_KEY);
-    if (data) {
-      this._history.set(JSON.parse(data));
+      // Persiste o histórico atualizado no localStorage.
+      this.saveToStorage();
+
+      console.debug('[NavHistory] Adicionado registro:', record);
+    } catch (err) {
+      console.error('[NavHistory] Erro ao adicionar registro', err);
     }
   }
 
+
+  // Salva o histórico atual no localStorage.
+  // É chamado automaticamente toda vez que o histórico é alterado.
+  private saveToStorage() {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this._history()));
+      }
+    } catch (err) {
+      console.warn('[NavHistory] Falha ao salvar no localStorage', err);
+    }
+  }
+
+
+  //Carrega o histórico do localStorage (caso exista) e atualiza o signal `_history` com os dados encontrados.
+  private loadFromStorage() {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const raw = localStorage.getItem(this.STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw) as NavigationRecord[];
+          this._history.set(parsed);
+        }
+      }
+    } catch (err) {
+      console.warn('[NavHistory] Falha ao carregar do localStorage', err);
+    }
+  }
 }

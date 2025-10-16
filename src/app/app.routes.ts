@@ -8,16 +8,16 @@ import { CharacterList } from './pages/characters/list/character-list';
 import { CharacterDetail } from './pages/characters/detail/character-detail';
 
 export const routes: Routes = [
-  { path: '', component: Home },
-  { path: 'episodes', component: EpisodesComponent },
-  { path: 'episodes/:id', component: EpisodeDetailsComponent },
-  { path: 'characters', component: CharacterList },
-  { path: 'characters/:id', component: CharacterDetail },
-  { path: '**', redirectTo: '' },
+  { path: 'home', component: Home, title: 'Dashboard' },
+  { path: 'episodes', component: EpisodesComponent, title: 'Episódios' },
+  { path: 'episodes/:id', component: EpisodeDetailsComponent, title: 'Detalhe do episódio' },
+  { path: 'characters', component: CharacterList, title: 'Personagens' },
+  { path: 'characters/:id', component: CharacterDetail, title: 'Dethale do Personagem' },
+  { path: '**', redirectTo: '/home' },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

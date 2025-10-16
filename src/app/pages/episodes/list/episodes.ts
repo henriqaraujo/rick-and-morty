@@ -1,11 +1,21 @@
+import { EpisodeFilter } from './../../../models/episode-filter';
 import { Episode } from './../../../models/episodes';
-import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, OnInit, signal, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Subject, takeUntil } from 'rxjs';
 import { EpisodesService } from '../../../services/episodes.service';
-
 import { HttpClient } from '@angular/common/http';
+import { SearchService } from '../../../services/search.service';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  startWith,
+  switchMap,
+  takeUntil,
+} from 'rxjs/operators';
+import { of, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-episodes',
@@ -14,50 +24,77 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './episodes.html',
   styleUrls: ['./episodes.scss'],
 })
-export class EpisodesComponent implements OnInit, OnDestroy {
+export class EpisodesComponent implements OnInit {
   private _episodes = signal<Episode[]>([]);
   private _currentPage = signal(1); // página atual a ser carregada
   private _loading = signal<boolean>(false); // evita chamadas paralelas
   private _hasMore = signal<boolean>(true); // indica se há mais páginas
-
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private http: HttpClient,
-    private episodesService: EpisodesService
-  ) {}
-
-  get episodes(): Episode[]{ return this._episodes();}
-  get currentPage(): number { return this._currentPage(); }
-  get hasMore(): boolean { return this._hasMore(); }
-  get loading(): boolean { return this._loading(); }
-
   private destroy$ = new Subject<void>();
 
-  ngOnInit(): void {
-    this.loadEpisodes(this._currentPage());
+  constructor(
+    private router: Router,
+    private episodesService: EpisodesService,
+    private searchService: SearchService
+  ) {}
+
+  get episodes(): Episode[] {
+    return this._episodes();
+  }
+  get currentPage(): number {
+    return this._currentPage();
+  }
+  get hasMore(): boolean {
+    return this._hasMore();
+  }
+  get loading(): boolean {
+    return this._loading();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  ngOnInit(): void {
+    if (!this.searchService.term()) this.loadEpisodes(1, '');
+
+    this.searchService.search$
+      .pipe(
+        startWith(this.searchService.term()),
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap((term) => {
+          this._loading.set(true);
+          return this.episodesService.getEpisodes({ page: 1, name: term } as EpisodeFilter).pipe(
+            catchError((err) => {
+              console.error('Erro na API', err);
+              return of({ results: [] });
+            })
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (res) => {
+          this._episodes.set(res.results);
+          this._loading.set(false);
+        },
+        error: () => {
+          this._episodes.set([]);
+          this._loading.set(false);
+        },
+      });
   }
 
   // Carrega a página 'page' de episódios e concatena ao array
-  loadEpisodes(page: number): void {
-    console.log('loadEpisodes called, page=', this.currentPage);
+  loadEpisodes(page: number, name?: string): void {
     if (this.loading || !this.hasMore) return;
 
     this._loading.set(true);
     this._currentPage.set(page);
 
     this.episodesService
-      .getEpisodes(page)
-      //.pipe(takeUntil(this.destroy$))
+      .getEpisodes({ page, name } as EpisodeFilter)
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
           console.log('getEpisodes res:', res);
-          this._episodes.update(value  => [...value, ...res.results]);
+          this._episodes.update((value) => [...value, ...res.results]);
           this._hasMore.set(!!res.info?.next);
           this._loading.set(false);
         },
@@ -74,7 +111,7 @@ export class EpisodesComponent implements OnInit, OnDestroy {
     const threshold = 120; // px antes do fim para acionar novo carregamento
 
     if (target.scrollTop + target.clientHeight >= target.scrollHeight - threshold) {
-      this.loadEpisodes(this.currentPage+1);
+      this.loadEpisodes(this.currentPage + 1);
     }
   }
 

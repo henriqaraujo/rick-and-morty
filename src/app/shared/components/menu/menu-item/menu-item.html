@@ -1,5 +1,5 @@
 <li>
-  <button class="animation-icons">
+  <button class="animation-icons" [routerLink]="url" routerLinkActive="active">
     <img [src]="icon" [alt]="label" />
     @if(isExpanded){<span>{{label}}</span>}
   </button>

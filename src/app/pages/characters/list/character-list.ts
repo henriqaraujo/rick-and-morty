@@ -3,6 +3,18 @@ import { CommonModule } from '@angular/common';
 import { CharactersService } from '../../../services/characters.service';
 import { Character } from '../../../models/characters';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SearchService } from '../../../services/search.service';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  of,
+  startWith,
+  Subject,
+  switchMap,
+  takeUntil,
+} from 'rxjs';
+import { CharacterFilter } from '../../../models/character-filter';
 
 @Component({
   selector: 'app-character-list',
@@ -12,15 +24,15 @@ import { ActivatedRoute, Router } from '@angular/router';
   imports: [CommonModule],
 })
 export class CharacterList implements OnInit {
-
-  // Signals — estados reativos
   private _characters = signal<Character[]>([]);
   private _loading = signal<boolean>(true);
+  private destroy$ = new Subject<void>();
 
   constructor(
     private _characterService: CharactersService,
     private _router: Router,
     private _route: ActivatedRoute,
+    private searchService: SearchService
   ) {}
 
   // Getters para template
@@ -33,26 +45,52 @@ export class CharacterList implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fetchAllCharacters();
+    if (!this.searchService.term()) this.loadCharacters();
+
+    this.searchService.search$
+      .pipe(
+        startWith(this.searchService.term()),
+        debounceTime(500),
+        distinctUntilChanged(),
+        switchMap((term) => {
+          this._loading.set(true);
+          return this._characterService
+            .getCharacters({ page: 1, name: term } as CharacterFilter)
+            .pipe(
+              catchError((err) => {
+                console.error('Erro na API', err);
+                return of({ results: [] });
+              })
+            );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (res) => {
+          this._characters.set(res.results);
+          this._loading.set(false);
+        },
+        error: () => {
+          this._characters.set([]);
+          this._loading.set(false);
+        },
+      });
   }
 
-  // Método para buscar todos os personagens
-  fetchAllCharacters(): void {
-    this._loading.set(true);
-
-    this._characterService.getAllCharacters().subscribe({
-      next: (response) => {
-        this._characters.set(response.results);
+  loadCharacters() {
+    this._characterService.getCharacters({ page: 1 } as CharacterFilter).subscribe({
+      next: (res) => {
+        this._characters.set(res.results);
         this._loading.set(false);
       },
-      error: (err) => {
-        console.error('Erro ao buscar personagens:', err);
+      error: () => {
+        this._characters.set([]);
         this._loading.set(false);
       },
     });
   }
 
   goToCharacter(id: number): void {
-  this._router.navigate(['/characters', id]);
-}
+    this._router.navigate(['/characters', id]);
+  }
 }

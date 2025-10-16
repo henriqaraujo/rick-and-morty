@@ -7,12 +7,13 @@
 
 .episodes-table-container {
   background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  padding: 20px 24px;
-  width: 90%;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
   max-width: 1000px;
+  width: 90%;
   overflow-x: auto;
+  transition: all 0.3s ease;
 }
 
 /* ===== TÍTULO ===== */
@@ -21,38 +22,37 @@
   font-family: 'Roboto', sans-serif;
   font-weight: 700;
   font-size: 18px;
-  margin-bottom: 16px;
+  line-height: 120%;
+  margin-bottom: 1.5rem;
 }
 
 /* ===== TABELA ===== */
 .episodes-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: 'Roboto', sans-serif;
   background-color: #fff;
-}
-
-.episodes-table thead {
-  border-radius: 8px 8px 0 0;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .episodes-table th,
 .episodes-table td {
+  padding: 1rem;
   text-align: left;
-  padding: 14px 10px;
+  border-bottom: 1px solid #eee;
   font-size: 14px;
   color: #333;
-  border-bottom: 1px solid #e8f0f2;
 }
 
 .episodes-table th {
   font-weight: 600;
+
 }
 
 /* ===== LINHAS ===== */
 .episodes-table tbody tr.clickable {
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background 0.2s;
 }
 
 .episodes-table tbody tr.clickable:hover {
@@ -68,10 +68,12 @@
   color: #666;
 }
 
-/* ===== RESPONSIVIDADE ===== */
+/* ======================= RESPONSIVIDADE ======================= */
+
+/* Tablets (768px) */
 @media (max-width: 768px) {
   .episodes-table-container {
-    padding: 16px;
+    padding: 1.5rem;
     width: 100%;
   }
 
@@ -81,11 +83,12 @@
 
   .episodes-table tbody tr {
     display: block;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     background-color: #fff;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
   }
 
   .episodes-table td {
@@ -93,6 +96,7 @@
     justify-content: space-between;
     padding: 6px 0;
     border: none;
+    font-size: 13px;
   }
 
   .episodes-table td::before {
@@ -100,5 +104,66 @@
     font-weight: 600;
     color: #045660;
   }
+
+  .episodes-table-container h2 {
+    font-size: 16px;
+  }
 }
 
+/* Smartphones (480px) */
+@media (max-width: 480px) {
+  .episodes-wrapper {
+    padding: 20px 10px;
+  }
+
+  .episodes-table-container {
+    padding: 1rem;
+    border-radius: 6px;
+  }
+
+  .episodes-table tbody tr {
+    padding: 10px;
+  }
+
+  .episodes-table td {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .episodes-table td::before {
+    margin-bottom: 4px;
+  }
+
+  .episodes-table-container h2 {
+    font-size: 15px;
+  }
+
+  p {
+    font-size: 12px;
+  }
+}
+
+/* ======================= FONTES ======================= */
+p,
+h2,
+h3 {
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  letter-spacing: 0;
+  line-height: 1.2;
+}
+
+p {
+  font-weight: 400;
+  font-size: 13px;
+  color: #333;
+}
+
+h2,
+h3 {
+  color: #045660;
+  font-weight: 700;
+  font-size: 16px;
+}
+/* ======================= FONTES FIM ======================= */

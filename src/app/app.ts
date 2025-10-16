@@ -1,10 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { Header } from './pages/header/header';
 import { SidebarMenu } from './shared/components/menu/sidebar/sidebar-menu';
-import { Home } from "./pages/home/home";
-import { EpisodesComponent } from "./pages/episodes/list/episodes";
-import { CharacterList } from './pages/characters/list/character-list';
 import { RouterOutlet } from '@angular/router';
+import { NavigationHistoryService } from './services/navigation-history.service';
 
 @Component({
   selector: 'app-root',
@@ -20,5 +18,8 @@ import { RouterOutlet } from '@angular/router';
 export class App {
   protected readonly title = signal('rick-and-morty');
 
+  constructor(private navigationHistory: NavigationHistoryService) {
+
+  }
 
 }
