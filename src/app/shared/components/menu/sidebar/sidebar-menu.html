@@ -1,0 +1,13 @@
+<nav class="sidebar" [class.expanded]="isExpanded">
+  <ul class="nav-icons">
+    <li>
+      <button class="toggle-btn animation-icons" (click)="toggleSidebar()">
+        <img src="icons/list.svg" alt="Menu" />
+      </button>
+    </li>
+
+    <app-menu-item icon="icons/home.svg" label="Home" [isExpanded]="isExpanded" routerLink="" />
+    <app-menu-item icon="icons/film.svg" label="Episódios" [isExpanded]="isExpanded" routerLink="episodes" />
+    <app-menu-item icon="icons/person.svg" label="Personagens" [isExpanded]="isExpanded" routerLink="characters" />
+  </ul>
+</nav>

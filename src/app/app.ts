@@ -1,24 +1,18 @@
 import { Component, signal } from '@angular/core';
 import { Header } from './pages/header/header';
-import { LeftMenu } from './pages/left-menu/left-menu';
-import { Dashboard } from "./pages/dashboard/dashboard";
-import { EpisodesComponent } from "./pages/episodes/episodes";
-import { Characters } from './pages/characters/characters';
-import { CharacterDetail } from './pages/character-detail/character-detail';
-import { EpisodeDetailsComponent } from './pages/episode-details/episode-details';
-
-
+import { SidebarMenu } from './shared/components/menu/sidebar/sidebar-menu';
+import { Home } from "./pages/home/home";
+import { EpisodesComponent } from "./pages/episodes/list/episodes";
+import { CharacterList } from './pages/characters/list/character-list';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    Dashboard,
     Header,
-    LeftMenu,
-    EpisodesComponent,
-    EpisodeDetailsComponent
-
+    SidebarMenu,
+    RouterOutlet
 ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
@@ -26,5 +20,5 @@ import { EpisodeDetailsComponent } from './pages/episode-details/episode-details
 export class App {
   protected readonly title = signal('rick-and-morty');
 
-  
+
 }

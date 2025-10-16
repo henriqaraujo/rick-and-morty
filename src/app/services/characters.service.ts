@@ -9,9 +9,9 @@ import { Character } from '../models/characters';
   providedIn: 'root'
 })
 export class CharactersService {
-  
+
   //Definindo a URL base da API de personagens
-  private apiUrl = `${environment.apiBase}/character`;
+  private apiUrl = `${environment.apisHost.rickAndMorty}/character`;
 
   //Injetando o HttpClient para conseguir fazer Get nos personagens
   constructor(private http: HttpClient) {}

@@ -1,6 +1,9 @@
 <div class="container">
   <h2>Personagens</h2>
-  <table>
+
+  <div *ngIf="loading">Carregando personagens...</div>
+
+  <table *ngIf="!loading">
     <thead>
       <tr>
         <th>Nome</th>
@@ -11,7 +14,7 @@
     <tbody>
       <tr
         *ngFor="let character of characters"
-        (click)="goToDetails(character.id)"
+        (click)="goToCharacter(character.id)"
         class="character-row"
       >
         <td class="character-name">

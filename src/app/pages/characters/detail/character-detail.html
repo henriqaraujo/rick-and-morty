@@ -1,10 +1,11 @@
 <div class="container">
   <div class="character-card" *ngIf="character">
-    <div class="header">
+    <div class="character-header">
       <img [src]="character.image" alt="{{ character.name }}" />
-      <div class="info">
+      <div class="character-info">
         <h2>{{ character.name }}</h2>
-        <div class="grid">
+
+        <div class="info-grid">
           <p><strong>Status</strong> {{ character.status }}</p>
           <p><strong>Location</strong> {{ character.location?.name }}</p>
           <p><strong>Type</strong> {{ character.type || '--' }}</p>
@@ -20,7 +21,7 @@
     <h3>Episódios</h3>
     <ul>
       <li *ngFor="let episode of episodes">
-        <strong>{{ episode.name }}</strong><br />
+        <a>{{ episode.name }}</a>
         <span>{{ episode.episode }}</span>
       </li>
     </ul>

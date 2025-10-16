@@ -1,10 +1,9 @@
-<div class="container" *ngIf="!loading && episode; else loadingTemplate">
+@if(!loading){
+<div class="container">
   <div class="card">
-    <div class="title">
-      {{ episode.episode }} | {{ episode.name }}
-    </div>
+    <div class="title">{{ episode?.episode }} | {{ episode?.name }}</div>
     <div class="date">
-      {{ episode.air_date }}
+      {{ episode?.air_date }}
     </div>
 
     <h3>Personagens</h3>
@@ -12,13 +11,13 @@
     <div class="characters">
       <div class="character-card" *ngFor="let char of characters">
         <img [src]="char.image" [alt]="char.name" />
-        <a>NAME</a>
-        <p>ESPECIE</p>
+        <a>{{char.name}}</a>
+        <p>{{char.gender}}</p>
       </div>
     </div>
   </div>
 </div>
-
+}
 <ng-template #loadingTemplate>
   <div class="container">
     <p>Carregando episódio...</p>

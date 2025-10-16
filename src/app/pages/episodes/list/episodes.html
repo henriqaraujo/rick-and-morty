@@ -1,0 +1,40 @@
+<div class="episodes-wrapper">
+  <h2>Episódios</h2>
+
+  <!-- container com scroll interno; (scroll) chama onScroll do component -->
+  <div class="episodes-table-container" (scroll)="onScroll($event)">
+    <table class="episodes-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Temporada</th>
+          <th>Título</th>
+          <th>Lançamento</th>
+        </tr>
+      </thead>
+
+      @if(episodes.length === 0 && !loading) {
+      <tbody>
+        <tr>
+          <td colspan="4" class="no-data">Nenhum episódio encontrado.</td>
+        </tr>
+      </tbody>
+      }@else if(episodes.length > 0) {
+      <tbody>
+        @for (ep of episodes; track trackByEpisode(ep)) {
+        <tr (click)="goToEpisode(ep.id)" class="clickable">
+          <td>#{{ ep.id.toString().padStart(2, '0') }}</td>
+          <td>{{ ep.episode.slice(1, 3) }}</td>
+          <td>{{ ep.name }}</td>
+          <td>{{ ep.air_date | date: 'dd/MM/yyyy' }}</td>
+        </tr>
+        }
+      </tbody>
+      }
+    </table>
+
+    <!-- indicadores de estado -->
+    <div class="loading" *ngIf="loading">Carregando...</div>
+    <div class="end" *ngIf="!hasMore && !loading">Fim da lista</div>
+  </div>
+</div>

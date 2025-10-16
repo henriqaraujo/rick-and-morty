@@ -1,0 +1,32 @@
+.animation-icons {
+  background-color: transparent;
+  width: 90%;
+  transition: background-color 0.3s ease, transform 0.2s ease !important;
+  border-radius: 4px;
+
+  button {
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: black;
+    cursor: pointer;
+  }
+
+  img {
+    width: 24px;
+    height: 24px;
+    color: black;
+    margin-left: 16px;
+  }
+
+  span {
+    font-size: 14px;
+    white-space: nowrap;
+  }
+}
+
+.animation-icons:hover {
+  background-color: rgba(101, 184, 105, 0.678); /* tom suave da borda */
+  transform: translateX(4px); /* leve deslocamento para a direita */
+}

@@ -1,0 +1,103 @@
+Cópia/* Mantive suas regras base e adicionei o container de scroll interno */
+.episodes-container {
+  width: 80%;
+  margin: 40px auto;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  font-family: 'Roboto', sans-serif;
+}
+
+.episodes-container h2 {
+  color: #005f6b;
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+/* Contêiner que receberá o scroll interno (envolve a tabela no HTML) */
+.episodes-scroll {
+  --row-height: 56px; /* ajuste conforme desejar (ex: 48,56,64) */
+
+  /* mostra 10 linhas visíveis + espaço aproximado para o cabeçalho (48px) */
+  max-height: calc(var(--row-height) * 10 + 48px);
+  overflow-y: auto;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.04);
+  background: #fff;
+}
+
+/* Tabela dentro do contêiner de scroll */
+.episodes-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Mantém o cabeçalho visível enquanto o corpo rola */
+.episodes-table thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  background: #f9fbfc;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* O tbody fica em bloco para permitir que ele role dentro do container */
+.episodes-table tbody {
+  display: block;
+  width: 100%;
+}
+
+/* Cada linha com altura fixa para garantir 10 itens visíveis */
+.episodes-table tbody tr {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  height: var(--row-height);
+  vertical-align: middle;
+}
+
+th, td {
+  text-align: left;
+  padding: 12px 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+th {
+  border-bottom: 2px solid #e0e0e0;
+}
+
+/* garantir linha inferior nas células do tbody */
+.episodes-table tbody tr td {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.clickable:hover {
+  background-color: #e6f4f8;
+}
+
+/* Indicadores de estado (Carregando / Fim da lista) */
+.loading,
+.end {
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  background: transparent;
+}
+
+/* Responsividade simples */
+@media (max-width: 600px) {
+  .episodes-container { width: 95%; }
+  .episodes-table thead { display: none; }
+  .episodes-table tbody tr { display: block; height: auto; padding: 12px; }
+  .episodes-table td { display: block; width: 100%; }
+}

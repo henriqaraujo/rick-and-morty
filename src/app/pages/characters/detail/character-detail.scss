@@ -1,0 +1,83 @@
+.container {
+  background-color: #f4fafd;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.character-card,
+.episodes-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.character-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.character-header img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.character-info h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(150px, 1fr));
+  row-gap: 0.5rem;
+}
+
+.info-grid p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.info-grid strong {
+  font-weight: 600;
+  margin-right: 4px;
+  color: #004d4d;
+}
+
+.episodes-card h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.episodes-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.episodes-card li {
+  margin-bottom: 0.8rem;
+}
+
+.episodes-card a {
+  font-weight: 600;
+  color: #004d4d;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.episodes-card a:hover {
+  text-decoration: underline;
+}
+
+.episodes-card span {
+  display: block;
+  font-size: 0.85rem;
+  color: #555;
+}
