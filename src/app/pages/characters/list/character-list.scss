@@ -1,5 +1,5 @@
 .container {
-  background-color: #f4fafd;
+  background-color: #ffffff;
   border-radius: 8px;
   padding: 2rem;
   max-width: 1000px;
@@ -20,9 +20,6 @@ table {
   overflow: hidden;
 }
 
-thead {
-  background-color: #eaf4fa;
-}
 
 th,
 td {
@@ -52,3 +49,32 @@ td {
 .character-row:hover {
   background-color: #f0f8ff;
 }
+/* ======================= FONTES ======================= */
+/*Revisar conceito para evitar repetição de css dentro dos components e usar esse como padrão para todos
+Aulas Udemy - 36 a 40 */
+p, h2, h3{
+  font-family: 'Roboto', sans-serif;
+  font-style: Bold;
+  letter-spacing: 0%;
+  line-height: 100%;
+}
+
+p{
+  font-family: 'Roboto',sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+h2, h3{
+  color: #045660;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-style: Bold;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+/* ======================= FONTES FIM ======================= */
