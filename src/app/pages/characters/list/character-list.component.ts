@@ -19,11 +19,11 @@ import { CharacterFilter } from '../../../models/character-filter';
 @Component({
   selector: 'app-character-list',
   standalone: true,
-  templateUrl: './character-list.html',
-  styleUrls: ['./character-list.scss'],
+  templateUrl: './character-list.component.html',
+  styleUrls: ['./character-list.component.scss'],
   imports: [CommonModule],
 })
-export class CharacterList implements OnInit {
+export class CharacterListComponent implements OnInit {
   private _characters = signal<Character[]>([]);
   private _loading = signal<boolean>(true);
   private destroy$ = new Subject<void>();

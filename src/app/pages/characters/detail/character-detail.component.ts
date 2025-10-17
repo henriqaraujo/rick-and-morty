@@ -2,15 +2,15 @@ import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { Character } from './../../../models/characters';
+import { Character } from '../../../models/characters';
 import { Episode } from '../../../models/episodes';
 
 @Component({
   selector: 'app-character-detail',
-  templateUrl: './character-detail.html',
+  templateUrl: './character-detail.component.html',
+  styleUrls: ['./character-detail.component.scss'],
   standalone: true,
   imports: [CommonModule],
-  styleUrls: ['./character-detail.scss'],
 })
 export class CharacterDetail implements OnInit {
   // signals corretos: character pode ser null até carregar

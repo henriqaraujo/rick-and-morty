@@ -4,11 +4,11 @@ import { MenuItem } from "../menu-item/menu-item";
 
 @Component({
   selector: 'app-sidebar-menu',
-  templateUrl: './sidebar-menu.html',
-  styleUrls: ['./sidebar-menu.scss'],
+  templateUrl: './sidebar-menu.component.html',
+  styleUrls: ['./sidebar-menu.component.scss'],
   imports: [MenuItem]
 })
-export class SidebarMenu {
+export class SidebarMenuComponent {
   isExpanded = false;
 
 

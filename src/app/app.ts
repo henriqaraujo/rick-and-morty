@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
-import { Header } from './pages/header/header';
-import { SidebarMenu } from './shared/components/menu/sidebar/sidebar-menu';
+import { HeaderComponent } from './shared/components/header/header.component';
+import { SidebarMenuComponent } from './shared/components/menu/sidebar/sidebar-menu.component';
 import { RouterOutlet } from '@angular/router';
 import { NavigationHistoryService } from './services/navigation-history.service';
 
@@ -8,8 +8,8 @@ import { NavigationHistoryService } from './services/navigation-history.service'
   selector: 'app-root',
   standalone: true,
   imports: [
-    Header,
-    SidebarMenu,
+    HeaderComponent,
+    SidebarMenuComponent,
     RouterOutlet
 ],
   templateUrl: './app.html',

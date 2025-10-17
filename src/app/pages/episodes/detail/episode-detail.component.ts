@@ -9,13 +9,13 @@ import { Character } from '../../../models/characters';
 import { EpisodesService } from '../../../services/episodes.service';
 
 @Component({
-  selector: 'app-episode-details',
+  selector: 'app-episode-detail',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './episode-details.html',
-  styleUrls: ['./episode-details.scss'],
+  templateUrl: './episode-detail.component.html',
+  styleUrls: ['./episode-detail.component.scss'],
 })
-export class EpisodeDetailsComponent implements OnInit {
+export class EpisodeDetailComponent implements OnInit {
   private _episode = signal<Episode|null>(null);
   private _characters = signal<Character[]>([]);
   private _loading = signal<boolean>(true);
@@ -42,7 +42,6 @@ export class EpisodeDetailsComponent implements OnInit {
 
 
   getEpisode(id: string) {
-    console.log('Fetching episode with id:', id);
     this.episodesService.getEpisodeById(id).subscribe({
       next: (episodeData) => {
         this._episode.set( episodeData);
@@ -69,7 +68,6 @@ export class EpisodeDetailsComponent implements OnInit {
         console.error(err);
       },
       complete: () => {
-        console.log('Episode fetch complete');
         this._loading.set(false);
       }
     });

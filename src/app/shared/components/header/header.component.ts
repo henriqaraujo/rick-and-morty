@@ -1,18 +1,18 @@
-import { EpisodeFilter } from './../../models/episode-filter';
+import { EpisodeFilter } from '../../../models/episode-filter';
 import { Component, signal } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
-import { CharactersService } from '../../services/characters.service';
-import { EpisodesService } from '../../services/episodes.service';
-import { SearchService } from '../../services/search.service';
+import { CharactersService } from '../../../services/characters.service';
+import { EpisodesService } from '../../../services/episodes.service';
+import { SearchService } from '../../../services/search.service';
 
 @Component({
   selector: 'app-header',
-  templateUrl: './header.html',
-  styleUrls: ['./header.scss'],
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
 })
-export class Header {
+export class HeaderComponent {
   searchTerm = '';
   _showSearchBar = signal(false);
   _currentUrl: string = '';

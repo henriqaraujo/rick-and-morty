@@ -1,16 +1,16 @@
 export interface EpisodeFilter {
   /**
-   * Page number
+   * Número da página
    */
   page: number;
 
   /**
-   * Episode name
+   * Nome do episódio
    */
   name?: string;
 
   /**
-   * Espisode code
+   * Código do episódio
    */
   episode?: string;
 }

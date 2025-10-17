@@ -1,10 +1,9 @@
-import { EpisodeFilter } from './../../../models/episode-filter';
-import { Episode } from './../../../models/episodes';
+import { EpisodeFilter } from '../../../models/episode-filter';
+import { Episode } from '../../../models/episodes';
 import { Component, OnInit, signal, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { EpisodesService } from '../../../services/episodes.service';
-import { HttpClient } from '@angular/common/http';
 import { SearchService } from '../../../services/search.service';
 import {
   catchError,
@@ -21,10 +20,10 @@ import { of, Subject } from 'rxjs';
   selector: 'app-episodes',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './episodes.html',
-  styleUrls: ['./episodes.scss'],
+  templateUrl: './episode-list.component.html',
+  styleUrls: ['./episode-list.component.scss'],
 })
-export class EpisodesComponent implements OnInit {
+export class EpisodeListComponent implements OnInit {
   private _episodes = signal<Episode[]>([]);
   private _currentPage = signal(1); // página atual a ser carregada
   private _loading = signal<boolean>(false); // evita chamadas paralelas
@@ -93,7 +92,6 @@ export class EpisodesComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          console.log('getEpisodes res:', res);
           this._episodes.update((value) => [...value, ...res.results]);
           this._hasMore.set(!!res.info?.next);
           this._loading.set(false);
