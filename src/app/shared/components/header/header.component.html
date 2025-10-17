@@ -6,9 +6,9 @@
     @if(showSearchBar){
     <input
       type="text"
-      #search
+      [(ngModel)]="searchTerm"
       placeholder="Buscar..."
-      (keyup)="onSearchChange(search.value)"
+      (keyup)="onSearchChange($event)"
       class="search-input"
     />
     }

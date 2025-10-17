@@ -1,8 +1,34 @@
+import { CharacterGender } from "./enuns/character-gender.enum";
+import { CharacterStatus } from "./enuns/character-status.enum";
+
 export interface CharacterFilter {
+  /**
+   * Número da página
+   */
   page?: number;
+
+  /**
+   * Nome do personagem
+   */
   name?: string;
-  status?: 'alive'|'dead'|'unknown';
+
+  /**
+   * Status do personagem
+   */
+  status?: CharacterStatus;
+
+  /**
+   *
+   */
   species?: string;
+
+  /**
+   * Tipo do personagem
+   */
   type?: string;
-  gender?: 'female'|'male'|'genderless'|'unknown'
+
+  /**
+   * Gênero do personagem
+   */
+  gender?: CharacterGender
 }
