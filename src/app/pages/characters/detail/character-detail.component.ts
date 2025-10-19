@@ -18,7 +18,7 @@ export class CharacterDetail implements OnInit {
   private _episodes = signal<Episode[]>([]);
 
   constructor(
-    private route: ActivatedRoute,
+    private route: ActivatedRoute, //Permite ler parâmetros da URL atual
     private http: HttpClient,
   ) {}
 

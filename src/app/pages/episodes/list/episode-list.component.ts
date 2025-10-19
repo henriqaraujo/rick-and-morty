@@ -24,6 +24,7 @@ import { of, Subject } from 'rxjs';
   styleUrls: ['./episode-list.component.scss'],
 })
 export class EpisodeListComponent implements OnInit {
+
   private _episodes = signal<Episode[]>([]);
   private _currentPage = signal(1); // página atual a ser carregada
   private _loading = signal<boolean>(false); // evita chamadas paralelas
@@ -31,9 +32,9 @@ export class EpisodeListComponent implements OnInit {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private router: Router,
-    private episodesService: EpisodesService,
-    private searchService: SearchService
+    private router: Router, //Permite navegar entre páginas
+    private episodesService: EpisodesService, //
+    private searchService: SearchService //Gerencia o termo digitado na barra de pesquisa
   ) {}
 
   get episodes(): Episode[] {
@@ -80,20 +81,43 @@ export class EpisodeListComponent implements OnInit {
       });
   }
 
-  // Carrega a página 'page' de episódios e concatena ao array
+  /*
+  * Carrega a página 'page' de episódios e concatena ao array
+  */
   loadEpisodes(page: number, name?: string): void {
+
+    /**
+     * this.loading → evita que o método rode enquanto uma requisição ainda está em andamento.
+     * !this.hasMore → evita tentar carregar mais páginas quando a API já não tem mais resultados.
+     * Isso previne requisições duplicadas ou loops infinitos de carregamento.
+    */
     if (this.loading || !this.hasMore) return;
 
+    /*Define estados iniciais antes da requisição
+     _loading: indica visualmente (ex. spinner) que a tela está carregando.
+     _currentPage: salva qual página está sendo requisitada.*/
     this._loading.set(true);
     this._currentPage.set(page);
 
+
+     /* Chamada ao serviço de episódios
+     * O método getEpisodes() recebe um objeto do tipo EpisodeFilter, que contém parâmetros da busca.
+     * { page, name } cria um objeto dinâmico com as propriedades page e name (caso o nome exista).
+     * O as EpisodeFilter apenas informa ao TypeScript qual é o tipo esperado. */
     this.episodesService
       .getEpisodes({ page, name } as EpisodeFilter)
+      /* O takeUntil(this.destroy$) garante que a assinatura seja cancelada quando o componente for destruído (no ngOnDestroy()), evitando vazamento de memória.*/
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
+          /*this._episodes.update(...): adiciona os novos episódios ao array atual (concatenando os resultados antigos e os novos).
+            - Isso permite scroll infinito (carregar mais páginas sem perder as anteriores).*/
           this._episodes.update((value) => [...value, ...res.results]);
+
+          //this._hasMore.set(!!res.info?.next): atualiza o flag se a API indicou que há mais páginas disponiveis
           this._hasMore.set(!!res.info?.next);
+
+          //this._loading.set(false): indica que terminou o carregamento.
           this._loading.set(false);
         },
         error: (err) => {
@@ -103,7 +127,9 @@ export class EpisodeListComponent implements OnInit {
       });
   }
 
-  // Chamado pelo (scroll) do container no template
+  /*
+  * Chamado pelo (scroll) do container no template
+  */
   onScroll(ev: Event): void {
     const target = ev.target as HTMLElement;
     const threshold = 120; // px antes do fim para acionar novo carregamento
