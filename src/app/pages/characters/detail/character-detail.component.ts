@@ -27,6 +27,8 @@ export class CharacterDetail implements OnInit {
   get episodes(): Episode[] { return this._episodes(); }
 
   ngOnInit(): void {
+    //snapshot é uma foto instantânea da rota atual (sem reagir a futuras mudanças).
+    //paramMap é um objeto que contém os parâmetros da rota.
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.fetchCharacter(id);
@@ -39,7 +41,7 @@ export class CharacterDetail implements OnInit {
       .subscribe({
         next: (character) => {
           this._character.set(character);
-          // character.episode é um array de URLs
+          // Se character.episode existir e não for vazio, usa ele; caso contrário, usa um array vazio [].
           this.fetchEpisodes(character.episode || []);
         },
         error: (err) => {
@@ -50,33 +52,48 @@ export class CharacterDetail implements OnInit {
       });
   }
 
-  fetchEpisodes(episodeUrls: string[]): void {
-    if (!episodeUrls || episodeUrls.length === 0) {
-      this._episodes.set([]);
-      return;
-    }
 
-    const episodeIds = episodeUrls
-      .map((url) => url.split('/').pop())
-      .filter((id): id is string => !!id);
-
-    if (episodeIds.length === 0) {
-      this._episodes.set([]);
-      return;
-    }
-
-    const idsParam = episodeIds.join(',');
-
-    this.http
-      .get<Episode[] | Episode>(`https://rickandmortyapi.com/api/episode/${idsParam}`)
-      .subscribe({
-        next: (data) => {
-          this._episodes.set(Array.isArray(data) ? data : [data]);
-        },
-        error: (err) => {
-          console.error('Erro ao carregar episódios', err);
-          this._episodes.set([]);
-        }
-      });
+  /**
+   * O método verifica se existem URLs de episódios e, se não houver, limpa a lista de episódios e sai, garantindo que o app não quebre antes de tentar buscar os dados.
+   */
+fetchEpisodes(episodeUrls: string[]): void {
+  // 1️⃣ Verifica se o array de URLs existe ou está vazio
+  if (!episodeUrls || episodeUrls.length === 0) {
+    this._episodes.set([]); // Limpa o signal de episódios
+    return;                 // Sai do método, nada mais é feito
   }
+
+  // 2️⃣ Extrai os IDs dos episódios a partir das URLs
+  const episodeIds = episodeUrls
+    .map((url) => url.split('/').pop())  // Pega a última parte da URL (ex: "1" de ".../episode/1")
+    .filter((id): id is string => !!id); // Remove valores nulos ou indefinidos
+
+  // 3️⃣ Se nenhum ID válido for encontrado, limpa e sai
+  if (episodeIds.length === 0) {
+    this._episodes.set([]); // Limpa o signal
+    return;                 // Interrompe o método
+  }
+
+  // 4️⃣ Cria uma string com os IDs separados por vírgula
+  // Para a API aceitar múltiplos episódios de uma vez
+  const idsParam = episodeIds.join(','); // Ex: "1,2,3"
+
+  // 5️⃣ Faz a requisição HTTP para buscar os episódios
+  this.http
+    .get<Episode[] | Episode>(`https://rickandmortyapi.com/api/episode/${idsParam}`)
+    .subscribe({
+      // 6️⃣ Quando a resposta chegar com sucesso
+      next: (data) => {
+        // Atualiza o signal `_episodes` com os dados retornados
+        // Se a API retornar um único episódio, transforma em array para manter consistência
+        this._episodes.set(Array.isArray(data) ? data : [data]);
+      },
+      // 7️⃣ Se ocorrer algum erro na requisição
+      error: (err) => {
+        console.error('Erro ao carregar episódios', err); // Loga o erro
+        this._episodes.set([]);                             // Limpa o signal para não exibir dados antigos
+      }
+    });
+}
+
 }
