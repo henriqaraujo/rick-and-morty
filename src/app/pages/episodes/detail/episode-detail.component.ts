@@ -16,14 +16,14 @@ import { EpisodesService } from '../../../services/episodes.service';
   styleUrls: ['./episode-detail.component.scss'],
 })
 export class EpisodeDetailComponent implements OnInit {
-  private _episode = signal<Episode|null>(null);
-  private _characters = signal<Character[]>([]);
-  private _loading = signal<boolean>(true);
+  private _episode = signal<Episode|null>(null); //guarda o episódio atual (pode ser null enquanto não carrega);
+  private _characters = signal<Character[]>([]); //guarda o array de personagens que participam do episódio;
+  private _loading = signal<boolean>(true); //indica se ainda está carregando (true no início, false ao terminar).
 
   constructor(
-    private route: ActivatedRoute,
-    private http: HttpClient,
-    private episodesService: EpisodesService
+    private route: ActivatedRoute, //permite acessar parâmetros da rota (por exemplo, /episodes/:id);
+    private http: HttpClient, //permite fazer requisições HTTP diretas (para os personagens).
+    private episodesService: EpisodesService //centraliza as chamadas de API dos episódios.
   ) {}
 
 
@@ -34,9 +34,9 @@ export class EpisodeDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      const id = params['id'];
+      const id = params['id']; // emite um objeto com os parâmetros da rota (por exemplo { id: '5' }) sempre que os parâmetros mudam para aquela rota.
       if (id)
-        this.getEpisode(id);
+        this.getEpisode(id); //Se existir id, chama o método getEpisode(id) para buscar e atualizar o episódio mostrado.
     });
   }
 
@@ -44,9 +44,10 @@ export class EpisodeDetailComponent implements OnInit {
   getEpisode(id: string) {
     this.episodesService.getEpisodeById(id).subscribe({
       next: (episodeData) => {
-        this._episode.set( episodeData);
+        this._episode.set(episodeData);
 
-        if (!episodeData.characters || episodeData.characters.length === 0) {
+
+        if (!episodeData.characters || episodeData.characters.length === 0) { //Se o episódio não tiver personagens, para por aqui e encerra o “carregando”.
           this._loading.set(false);
           return;
         }
