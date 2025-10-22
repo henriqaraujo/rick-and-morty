@@ -27,7 +27,7 @@ export class CharactersService {
   }
 
   //Método para pegar múltiplos personagens por IDs
-  getCharactersByIds(ids: number[]): Observable<Character[] | Character> {
+  getCharactersByIds(ids: (number | string)[]): Observable<Character[] | Character> {
   const idsParam = ids.join(',');
   return this.http.get<Character[] | Character>(`${this.apiUrl}/${idsParam}`);
   }

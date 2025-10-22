@@ -11,6 +11,9 @@ import { ResponseList } from '../models/response-list';
   providedIn: 'root'
 })
 export class EpisodesService {
+  getCharactersByIds(idsParam: string) {
+    throw new Error('Method not implemented.');
+  }
   //Definindo a URL base da API de episódios
   private apiUrl = `${environment.apisHost.rickAndMorty}/episode`;
 
@@ -28,7 +31,7 @@ export class EpisodesService {
   }
 
   // Método para pegar múltiplos episódios por IDs (API aceita /episode/1,2,3)
-  getEpisodesByIds(ids: number[]): Observable<Episode[] | Episode> {
+  getEpisodesByIds(ids: (number | string)[]): Observable<Episode[] | Episode> {
     const idsParam = ids.join(',');
     return this.http.get<Episode[] | Episode>(`${this.apiUrl}/${idsParam}`);
   }
